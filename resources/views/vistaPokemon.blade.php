@@ -1,36 +1,42 @@
-<h1>Lista de datos de la API</h1>
-
-@foreach ($enlace as $traducida)
-    <div style="background-color: rgb(90, 90, 90); margin-bottom: 16px; padding: 12px; border-radius: 8px; color: #fff;">
-        <h2 style="margin-top: 0;">{{ $traducida['name'] ?? 'Sin nombre' }} ({{ $traducida['alias'] ?? 'sin-alias' }})</h2>
-
-        <ul style="list-style: none; padding: 0; margin: 0; line-height: 1.6;">
-            <li><strong>id:</strong> {{ $traducida['id'] ?? '' }}</li>
-            <li><strong>national:</strong> {{ $traducida['national'] ?? '' }}</li>
-            <li><strong>name:</strong> {{ $traducida['name'] ?? '' }}</li>
-            <li><strong>alias:</strong> {{ $traducida['alias'] ?? '' }}</li>
-            <li><strong>form:</strong> {{ $traducida['form'] ?? '' }}</li>
-            <li><strong>formalias:</strong> {{ $traducida['formalias'] ?? '' }}</li>
-            <li><strong>published:</strong> {{ $traducida['published'] ?? '' }}</li>
-            <li><strong>genid:</strong> {{ $traducida['genid'] ?? '' }}</li>
-            <li><strong>releaseid:</strong> {{ $traducida['releaseid'] ?? '' }}</li>
-            <li><strong>type1:</strong> {{ $traducida['type1'] ?? '' }}</li>
-            <li><strong>type2:</strong> {{ $traducida['type2'] ?? '' }}</li>
-            <li><strong>hp:</strong> {{ $traducida['hp'] ?? '' }}</li>
-            <li><strong>attack:</strong> {{ $traducida['attack'] ?? '' }}</li>
-            <li><strong>defense:</strong> {{ $traducida['defense'] ?? '' }}</li>
-            <li><strong>spatk:</strong> {{ $traducida['spatk'] ?? '' }}</li>
-            <li><strong>spdef:</strong> {{ $traducida['spdef'] ?? '' }}</li>
-            <li><strong>speed:</strong> {{ $traducida['speed'] ?? '' }}</li>
-            <li><strong>fullname:</strong> {{ $traducida['fullname'] ?? '' }}</li>
-            <li><strong>img:</strong> {{ $traducida['img'] ?? '' }}</li>
-        </ul>
-
-        @if (!empty($traducida['img']))
-            <div style="margin-top: 10px;">
-                <img src="{{ $traducida['img'] }}" alt="{{ $traducida['name'] ?? 'pokemon' }}" style="max-width: 150px; height: auto; border-radius: 6px;">
-            </div>
-        @endif
+<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mb-6 flex items-end justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900">Lista de Pokémon</h1>
+        </div>
+        <a href="{{ route('dashboard') }}" class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">
+            Volver al dashboard
+        </a>
     </div>
 
-@endforeach
+    @if (!empty($enlace))
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            @foreach ($enlace as $pokemon)
+                <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">#{{ $pokemon['id'] }}</p>
+                            <h3 class="mt-1 text-lg font-bold text-slate-900">{{ $pokemon['name']['english'] ?? 'Sin nombre' }}</h3>
+                        </div>
+                        <span class="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700">
+                            Pokémon
+                        </span>
+                    </div>
+
+                    <p class="mt-3 text-sm text-slate-600">
+                        {{ $pokemon['species'] ?? 'Especie no disponible' }}
+                    </p>
+
+                    <div class="mt-4 flex gap-2">
+                        <button type="button" onclick="window.location.href='{{ route('pokemon-detalles', $pokemon['id']) }}'" class="inline-flex flex-1 items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+                            Detalles
+                        </button>
+                    </div>
+                </article>
+            @endforeach
+        </div>
+    @else
+        <div class="rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-800">
+            No hay datos disponibles desde la API.
+        </div>
+    @endif
+</div>

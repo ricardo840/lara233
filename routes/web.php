@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoryWebController;
+use App\Http\Controllers\ProductWebController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ctrlDatos;
 
@@ -17,14 +19,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::resource('categories', CategoryWebController::class)->except(['show']);
+    Route::resource('products', ProductWebController::class)->except(['show']);
+
     
     Route::get('/datos', [ctrlDatos::class, 'AccesoDatosVista']);
-
-    Route::get('/pokemon', [ctrlDatos::class, 'AccesoPokemonVista']);
-
-    Route::get('/ITI', [ctrlDatos::class, 'AccesoITIVista']);
-
-
 
     Route::get('/hosting', [ctrlDatos::class, 'AccesoHostingVista'])->name('hosting');
 

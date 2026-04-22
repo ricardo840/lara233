@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\category;
+use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Product;
@@ -14,7 +14,7 @@ class productTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $category=category::query()->firstOrCreate([
+        $category = Category::query()->firstOrCreate([
             'name' => 'Categoria 1',
             'description' => 'Descripción de la categoria 1'
         ]); //obtener la primera categoria de la tabla, si no existe se puede crear una nueva categoria

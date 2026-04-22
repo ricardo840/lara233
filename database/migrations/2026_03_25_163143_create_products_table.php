@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
 
             //FK //1 a 1
-            $table->foreignId('id_category')->nullable()->constrained('categories');
+            $table->foreignId('id_category')->nullable()->constrained('categories')->nullOnDelete();
         });
     }
 
