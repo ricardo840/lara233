@@ -23,10 +23,10 @@ class ProductFactory extends Factory
     {
         return [
             //
-            'name' => fake()->name(),
-            'description' => fake()->sentence(7),
-            'descriptionLong' => fake()->text(200),
-            'price' => fake()->randomFloat(2, 1, 100),
+            'name' => ucwords(implode(' ', fake()->words(3))),
+            'description' => fake()->sentence(8),
+            'descriptionLong' => fake()->paragraph(3),
+            'price' => fake()->randomFloat(2, 5, 999),
             'id_category' => Category::query()->inRandomOrder()->value('id') ?? Category::factory()->create()->id,
         ];
 
