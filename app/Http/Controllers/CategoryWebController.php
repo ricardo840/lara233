@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CategoryWebController extends Controller
@@ -51,7 +50,6 @@ class CategoryWebController extends Controller
 
     public function destroy(Category $category)
     {
-        Product::where('id_category', $category->getKey())->update(['id_category' => null]);
         $category->delete();
 
         return redirect()->route('categories.index')->with('success', 'Categoría eliminada correctamente.');
