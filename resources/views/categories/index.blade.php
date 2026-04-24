@@ -4,7 +4,8 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 Categorías
             </h2>
-            <a href="{{ route('categories.create') }}" class="rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700">
+            <a href="{{ route('categories.create') }}"
+               class="rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700">
                 Nueva categoría
             </a>
         </div>
@@ -12,9 +13,18 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+            {{-- Mensaje éxito --}}
             @if(session('success'))
                 <div class="rounded-md bg-green-100 px-4 py-3 text-green-800">
                     {{ session('success') }}
+                </div>
+            @endif
+
+            {{-- Mensaje error --}}
+            @if(session('error'))
+                <div class="rounded-md bg-red-100 px-4 py-3 text-red-800">
+                    {{ session('error') }}
                 </div>
             @endif
 
@@ -31,6 +41,7 @@
                                     <th class="px-4 py-3 text-right font-semibold text-gray-700">Acciones</th>
                                 </tr>
                             </thead>
+
                             <tbody class="divide-y divide-gray-100">
                                 @forelse($categories as $category)
                                     <tr>
@@ -38,18 +49,37 @@
                                         <td class="px-4 py-3 font-medium">{{ $category->name }}</td>
                                         <td class="px-4 py-3">{{ $category->description ?? 'Sin descripción' }}</td>
                                         <td class="px-4 py-3">{{ $category->products_count }}</td>
+
                                         <td class="px-4 py-3 text-right space-x-2">
-                                            <a href="{{ route('categories.edit', $category) }}" class="inline-flex rounded-md bg-amber-500 px-3 py-2 text-white hover:bg-amber-600">Editar</a>
-                                            <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline-block" onsubmit="return confirm('¿Eliminar esta categoría?');">
+
+                                            {{-- Editar --}}
+                                            <a href="{{ route('categories.edit', $category) }}"
+                                               class="inline-flex rounded-md bg-amber-500 px-3 py-2 text-white hover:bg-amber-600">
+                                                Editar
+                                            </a>
+
+                                            {{-- Eliminar con SweetAlert --}}
+                                            <form id="delete-form-{{ $category->id }}"
+                                                  action="{{ route('categories.destroy', $category) }}"
+                                                  method="POST"
+                                                  class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="rounded-md bg-red-600 px-3 py-2 text-white hover:bg-red-700">Eliminar</button>
+
+                                                <button type="button"
+                                                        onclick="confirmDelete({{ $category->id }})"
+                                                        class="rounded-md bg-red-600 px-3 py-2 text-white hover:bg-red-700">
+                                                    Eliminar
+                                                </button>
                                             </form>
+
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-4 py-8 text-center text-gray-500">No hay categorías registradas.</td>
+                                        <td colspan="5" class="px-4 py-8 text-center text-gray-500">
+                                            No hay categorías registradas.
+                                        </td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -63,4 +93,24 @@
             </div>
         </div>
     </div>
+
+    {{-- SweetAlert --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "No podrás revertir esto",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+    </script>
 </x-app-layout>

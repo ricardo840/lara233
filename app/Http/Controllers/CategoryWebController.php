@@ -50,8 +50,16 @@ class CategoryWebController extends Controller
 
     public function destroy(Category $category)
     {
+        if ($category->products()->count() > 0) {
+            return redirect()
+                ->route('categories.index')
+                ->with('error', 'No puedes eliminar esta categoría porque tiene productos asociados.');
+        }
+
         $category->delete();
 
-        return redirect()->route('categories.index')->with('success', 'Categoría eliminada correctamente.');
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Categoría eliminada correctamente.');
     }
 }
